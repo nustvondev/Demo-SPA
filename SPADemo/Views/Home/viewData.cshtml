@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "viewData";
+}
+<div class="container-fluid" ng-app="myApp" ng-controller="mycontroller">
+    <h2>Danh sach sinh vien</h2>
+    <a class="btn btn-danger" href="inputData">Them moi</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ten</th>
+                <th>Gioi Tinh</th>
+                <th>Ngay Sinh</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in datas">
+                <td>{{data.Id}}</td>
+                <td>{{data.Name}}</td>
+                <td>{{data.Gender}}</td>
+                <td>{{data.Birthday}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/angular.min.js"></script>
+    <script>
+        var myApp = angular.module("myApp", []);
+        myApp.controller("mycontroller", mycontroller);
+        function mycontroller($scope, $http) {
+            //$http.get('/data.json').then(function (res) {
+            //    console.log(res.data.students)
+            //    $scope.datas = res.data.students
+            //})
+            $http({ url: "getAllData", method: "GET" }).then(function (res) {
+                console.log(res.data)
+                $scope.datas = res.data;
+            })
+        }
+    </script>
+
+}

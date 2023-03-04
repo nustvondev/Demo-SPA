@@ -1,0 +1,24 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Nguyen Van A",
+      "gender": "Female"
+    },
+    {
+      "id": 2,
+      "name": "Nguyen Van B",
+      "gender": "Male"
+    },
+    {
+      "id": 3,
+      "name": "Nguyen Van C",
+      "gender": "Female"
+    },
+    {
+      "id": 4,
+      "name": "Nguyen Van D",
+      "gender": "Male"
+    }
+  ]
+}

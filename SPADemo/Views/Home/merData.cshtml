@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "viewData";
+}
+<div class="container-fluid" ng-app="myApp" ng-controller="mycontroller">
+    <h2>Danh sach sinh vien</h2>
+    <a class="btn btn-danger" href="inputData">Them moi</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ten</th>
+                <th>Gioi Tinh</th>
+                <th>Ngay Sinh</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in datas">
+                <td>{{data.Id}}</td>
+                <td>{{data.Name}}</td>
+                <td>{{data.Gender}}</td>
+                <td>{{data.Birthday}}</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <form ng-submit="addData()">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="name">Ten:</label>
+                            <input type="text" class="form-control" id="name" ng-model="newData.Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gioi Tinh:</label>
+                            <input type="text" class="form-control" id="gender" ng-model="newData.Gender">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday">Ngay Sinh:</label>
+                            <input type="text" class="form-control" id="birthday" ng-model="newData.Birthday">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Them</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/angular.min.js"></script>
+    <script>
+        var myApp = angular.module("myApp", []);
+        myApp.controller("mycontroller", mycontroller);
+        function mycontroller($scope, $http, $httpParamSerializerJQLike) {
+            $http({ url: "getAllData", method: "GET" }).then(function (res) {
+                $scope.datas = res.data;
+            });
+
+            $scope.addData = function () {
+                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                $scope.newData.__RequestVerificationToken = Token;
+                $http({
+                    url: "/Home/inputData",
+                    method: "POST",
+                    data: $httpParamSerializerJQLike($scope.newData),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+                }).then(function (res) {
+                    console.log(res.data.student);
+                    $scope.datas.push(res.data.student);
+                    $scope.newData = {};
+                });
+            };
+        }
+    </script>
+}

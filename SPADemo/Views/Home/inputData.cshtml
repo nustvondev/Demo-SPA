@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "inputData";
+}
+
+<h2>inputData</h2>
+
+<form ng-app="myApp" ng-controller="myCTL" ng-submit="addData()">
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Student</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+
+            Ten
+            <div class="col-md-10">
+                <input type="text" ng-model="st.Name" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            Gioi Tinh
+            <div class="col-md-10">
+                <input type="text" ng-model="st.Gender" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            Ngay Sinh
+            <div class="col-md-10">
+                <input type="text" ng-model="st.Birthday" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-warning">Them data</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</form>
+
+@section scripts
+{
+    <script src="~/Scripts/angular.min.js"></script>
+    <script>
+        var myApp = angular.module("myApp", []);
+        myApp.controller("myCTL", myCTL);
+        function myCTL($scope, $http, $httpParamSerializerJQLike) {
+            $scope.st = {};
+            $scope.addData = function () {
+                Token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
+                $scope.st.__RequestVerificationToken = Token;
+                dataRequest = $scope.st;
+                $http({
+                    method: "POST",
+                    url: '/Home/inputData',
+                    data: $httpParamSerializerJQLike(dataRequest),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+                }).then(function (res) {
+                    if (res.success == false) { alert("Ban ghi fail") }
+                    else {
+                        alert("Them ban ghi thanh cong");
+                        window.location.href ="/Home/viewData"
+                    }
+                })
+            }
+        }
+    </script>
+
+}
