@@ -3,7 +3,7 @@
 }
 <div class="container-fluid" ng-app="myApp" ng-controller="mycontroller">
     <h2>Danh sach sinh vien</h2>
-    <a class="btn btn-danger" href="inputData">Them moi</a>
+    
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -11,6 +11,7 @@
                 <th>Ten</th>
                 <th>Gioi Tinh</th>
                 <th>Ngay Sinh</th>
+                <th>Chuc nang</th>
             </tr>
         </thead>
         <tbody>
@@ -19,9 +20,11 @@
                 <td>{{data.Name}}</td>
                 <td>{{data.Gender}}</td>
                 <td>{{data.Birthday}}</td>
+                <td><button class="btn btn-danger" ng-click="deleteData(data.Id)">Xoa</button>
+                </td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td>
                     <form ng-submit="addData()">
                         @Html.AntiForgeryToken()
                         <div class="form-group">
@@ -42,6 +45,7 @@
             </tr>
         </tbody>
     </table>
+    
 </div>
 
 @section scripts
@@ -69,6 +73,30 @@
                     $scope.newData = {};
                 });
             };
+            $scope.deleteData = function (id) {
+                var confirmDelete = confirm("Bạn có chắc muốn xóa?");
+                if (confirmDelete) {
+                    $http({
+                        url: "/Home/deleteData/"+id,
+                        method: "POST",
+                        
+                    }).then(function (res) {
+                        var index = $scope.datas.findIndex(x => x.Id === id); 
+                        if (index > -1) {
+                            $scope.datas.splice(index, 1); 
+                        }
+                        $http({
+                            url: "getAllData",
+                            method: "GET"
+                        }).then(function (res) {
+                            $scope.datas = res.data;
+                        });
+                    });
+                }
+            };
+
+
+
         }
     </script>
 }

@@ -33,6 +33,24 @@ namespace SPADemo.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult deleteData(int id)
+        {
+            
+                try
+                {
+                    var stID=db.Students.FirstOrDefault(s=>s.Id==id);
+                    db.Students.Remove(stID);
+                    db.SaveChanges();
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+                }
+            
+            //return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
